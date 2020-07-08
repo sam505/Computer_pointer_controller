@@ -46,11 +46,15 @@ class FacialLandmarksDetection:
         if network.requests[0].wait(-1) == 0:
             results = network.requests[0].outputs[output_name]
 
-        self.preprocess_output(results, image)
-        return results, image
+        return results
         raise NotImplementedError
 
     def check_model(self):
+        input_name = next(iter(self.net.inputs))
+        input_shape = self.net.inputs[input_name].shape
+        output_name = next(iter(self.net.outputs))
+        output_shape = self.net.outputs[output_name].shape
+        return input_name, input_shape, output_name, output_shape
         raise NotImplementedError
 
     def preprocess_input(self, image):
@@ -65,9 +69,14 @@ class FacialLandmarksDetection:
         return image
         raise NotImplementedError
 
-    def preprocess_output(self, outputs):
+    def preprocess_output(self, image):
         '''
         Before feeding the output of this model to the next model,
         you might have to preprocess the output. This function is where you can do that.
         '''
+        outputs = self.predict(image)
+        for character in (outputs[0][0]):
+            print('landmark output: ', outputs)
+            print('landmark output_2: ', outputs[0][0])
+        return
         raise NotImplementedError

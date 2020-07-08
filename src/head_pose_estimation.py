@@ -41,17 +41,27 @@ class HeadPoseEstimation:
         '''
         network = self.load_model()
         processed_image = self.preprocess_input(image)
-        input_name, input_shape, output_name, output_shape = self.check_model()
+        input_name, input_shape, output_name_one, output_name_two, output_name_three, output_shape_one, \
+        output_shape_two, output_shape_three = self.check_model()
         input_dict = {input_name: processed_image}
         network.start_async(request_id=0, inputs=input_dict)
         if network.requests[0].wait(-1) == 0:
-            results = network.requests[0].outputs[output_name]
+            results_one = network.requests[0].outputs[output_name_one]
+            results_two = network.requests[0].outputs[output_name_two]
+            results_three = network.requests[0].outputs[output_name_three]
 
-        self.preprocess_output(results, image)
-        return results, image
+        return results_one, results_two, results_three
         raise NotImplementedError
 
     def check_model(self):
+        input_name = next(iter(self.net.inputs))
+        input_shape = self.net.inputs[input_name].shape
+        output_name_one, output_name_two, output_name_three = self.net.outputs
+        output_shape_one = self.net.outputs[output_name_one].shape
+        output_shape_two = self.net.outputs[output_name_two].shape
+        output_shape_three = self.net.outputs[output_name_three].shape
+        return input_name, input_shape, output_name_one, output_name_two, output_name_three, \
+               output_shape_one, output_shape_two, output_shape_three
         raise NotImplementedError
 
     def preprocess_input(self, image):
@@ -59,7 +69,8 @@ class HeadPoseEstimation:
         Before feeding the data into the model for inference,
         you might have to preprocess it. This function is where you can do that.
         '''
-        input_name, input_shape, output_name, output_shape = self.check_model()
+        input_name, input_shape, output_name_one, output_name_two, output_name_three, \
+        output_shape_one, output_shape_two, output_shape_three= self.check_model()
         image = cv2.resize(image, (input_shape[3], input_shape[2]), interpolation=cv2.INTER_AREA)
         image = image.transpose((2, 0, 1))
         image = image.reshape(1, *image.shape)
@@ -67,9 +78,14 @@ class HeadPoseEstimation:
 
         raise NotImplementedError
 
-    def preprocess_output(self, outputs):
+    def preprocess_output(self, image):
         '''
         Before feeding the output of this model to the next model,
         you might have to preprocess the output. This function is where you can do that.
         '''
+        yaw, pitch, roll = self.predict(image)
+        print('yaw: ', yaw)
+        print('pitch: ', pitch)
+        print('roll: ', roll)
+        return
         raise NotImplementedError

@@ -50,8 +50,7 @@ class FaceDetection:
         if network.requests[0].wait(-1) == 0:
             results = network.requests[0].outputs[output_name]
 
-        self.preprocess_output(results, image)
-        return results, image
+        return results
 
         raise NotImplementedError
 
@@ -76,11 +75,12 @@ class FaceDetection:
         return image
         raise NotImplementedError
 
-    def preprocess_output(self, outputs, image):
+    def preprocess_output(self, image):
         '''
         Before feeding the output of this model to the next model,
         you might have to preprocess the output. This function is where you can do that.
         '''
+        outputs = self.predict(image)
         for character in (outputs[0][0]):
             if character[2] > 0.6:
                 h, w, c = image.shape

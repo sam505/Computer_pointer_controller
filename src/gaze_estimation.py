@@ -41,6 +41,11 @@ class GazeEstimation:
         raise NotImplementedError
 
     def check_model(self):
+        input_name = next(iter(self.net.inputs))
+        input_shape = self.net.inputs[input_name].shape
+        output_name = next(iter(self.net.outputs))
+        output_shape = self.net.outputs[output_name].shape
+        return input_name, input_shape, output_name, output_shape
         raise NotImplementedError
 
     def preprocess_input(self, image):
