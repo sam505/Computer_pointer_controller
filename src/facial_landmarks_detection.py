@@ -75,8 +75,11 @@ class FacialLandmarksDetection:
         you might have to preprocess the output. This function is where you can do that.
         '''
         outputs = self.predict(image)
-        for character in (outputs[0][0]):
-            print('landmark output: ', outputs)
-            print('landmark output_2: ', outputs[0][0])
+        print('landmark output_2: ', outputs)
+        x0, y0 = outputs[0][0][0][0], outputs[0][1][0][0]
+        x1, y1 = outputs[0][2][0][0], outputs[0][3][0][0]
+        x2, y2 = outputs[0][4][0][0], outputs[0][5][0][0]
+        x3, y3 = outputs[0][6][0][0], outputs[0][7][0][0]
+        x4, y4 = outputs[0][8][0][0], outputs[0][9][0][0]
         return
         raise NotImplementedError

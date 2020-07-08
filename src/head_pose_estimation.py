@@ -84,8 +84,8 @@ class HeadPoseEstimation:
         you might have to preprocess the output. This function is where you can do that.
         '''
         yaw, pitch, roll = self.predict(image)
-        print('yaw: ', yaw)
-        print('pitch: ', pitch)
-        print('roll: ', roll)
+        print('yaw: ', yaw[0][0])
+        print('pitch: ', pitch[0][0])
+        print('roll: ', roll[0][0])
         return
         raise NotImplementedError
