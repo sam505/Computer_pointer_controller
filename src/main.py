@@ -3,7 +3,6 @@ from src.face_detection import FaceDetection
 from src.head_pose_estimation import HeadPoseEstimation
 from src.facial_landmarks_detection import FacialLandmarksDetection
 from src.gaze_estimation import GazeEstimation
-import numpy as np
 
 
 def main():
@@ -22,6 +21,7 @@ def main():
         cropped = fd.preprocess_output(image=image)
         landmarks_results = fld.preprocess_output(cropped)
         pose_results = hpe.preprocess_output(cropped)
+
 
     feed.close()
 

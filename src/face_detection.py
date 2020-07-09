@@ -70,6 +70,7 @@ class FaceDetection:
         '''
         input_name, input_shape, output_name, output_shape = self.check_model()
         image = cv2.resize(image, (input_shape[3], input_shape[2]), interpolation=cv2.INTER_AREA)
+        cv2.imshow('Raw', image)
         image = image.transpose((2, 0, 1))
         image = image.reshape(1, *image.shape)
         return image

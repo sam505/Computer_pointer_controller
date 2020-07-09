@@ -75,11 +75,20 @@ class FacialLandmarksDetection:
         you might have to preprocess the output. This function is where you can do that.
         '''
         outputs = self.predict(image)
+        h, w, c = image.shape
         print('landmark output_2: ', outputs)
-        x0, y0 = outputs[0][0][0][0], outputs[0][1][0][0]
-        x1, y1 = outputs[0][2][0][0], outputs[0][3][0][0]
-        x2, y2 = outputs[0][4][0][0], outputs[0][5][0][0]
-        x3, y3 = outputs[0][6][0][0], outputs[0][7][0][0]
-        x4, y4 = outputs[0][8][0][0], outputs[0][9][0][0]
+        x0, y0 = w*outputs[0][0][0][0], h*outputs[0][1][0][0]
+        x1, y1 = w*outputs[0][2][0][0], h*outputs[0][3][0][0]
+        x2, y2 = w*outputs[0][4][0][0], h*outputs[0][5][0][0]
+        x3, y3 = w*outputs[0][6][0][0], h*outputs[0][7][0][0]
+        x4, y4 = w*outputs[0][8][0][0], h*outputs[0][9][0][0]
+        print(x0, x1, x2, x3, x3, x4)
+        print(y0, y1, y2, y3, y3, y4)
+        image = cv2.circle(image, (int(x0), int(y0)), 10, (255, 0, 100), 2)
+        image = cv2.circle(image, (int(x1), int(y1)), 10, (255, 0, 100), 2)
+        image = cv2.circle(image, (int(x2), int(y2)), 10, (255, 0, 100), 2)
+        image = cv2.circle(image, (int(x3), int(y3)), 10, (255, 0, 100), 2)
+        image = cv2.circle(image, (int(x4), int(y4)), 10, (255, 0, 100), 2)
+        cv2.imshow('Landmarks', image)
         return
         raise NotImplementedError
