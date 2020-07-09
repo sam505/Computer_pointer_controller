@@ -3,7 +3,10 @@ This is a sample class for a model. You may choose to use it as-is or make any c
 This has been provided just to give you an idea of how to structure your model class.
 '''
 from openvino.inference_engine import IENetwork, IECore
+from src.gaze_estimation import GazeEstimation
 import cv2
+
+ge = GazeEstimation('models/intel/gaze-estimation-adas-0002/FP32/gaze-estimation-adas-0002', device='CPU')
 
 
 class FacialLandmarksDetection:
@@ -47,6 +50,7 @@ class FacialLandmarksDetection:
             results = network.requests[0].outputs[output_name]
 
         return results
+
         raise NotImplementedError
 
     def check_model(self):
@@ -54,7 +58,9 @@ class FacialLandmarksDetection:
         input_shape = self.net.inputs[input_name].shape
         output_name = next(iter(self.net.outputs))
         output_shape = self.net.outputs[output_name].shape
+
         return input_name, input_shape, output_name, output_shape
+
         raise NotImplementedError
 
     def preprocess_input(self, image):
@@ -63,10 +69,12 @@ class FacialLandmarksDetection:
         you might have to preprocess it. This function is where you can do that.
         '''
         input_name, input_shape, output_name, output_shape = self.check_model()
-        image = cv2.resize(image, (input_shape[3], input_shape[2]), interpolation=cv2.INTER_AREA)
-        image = image.transpose((2, 0, 1))
-        image = image.reshape(1, *image.shape)
+        if image.any():
+            image = cv2.resize(image, (input_shape[3], input_shape[2]), interpolation=cv2.INTER_AREA)
+            image = image.transpose((2, 0, 1))
+            image = image.reshape(1, *image.shape)
         return image
+
         raise NotImplementedError
 
     def preprocess_output(self, image):
@@ -77,18 +85,11 @@ class FacialLandmarksDetection:
         outputs = self.predict(image)
         h, w, c = image.shape
         print('landmark output_2: ', outputs)
-        x0, y0 = w*outputs[0][0][0][0], h*outputs[0][1][0][0]
-        x1, y1 = w*outputs[0][2][0][0], h*outputs[0][3][0][0]
-        x2, y2 = w*outputs[0][4][0][0], h*outputs[0][5][0][0]
-        x3, y3 = w*outputs[0][6][0][0], h*outputs[0][7][0][0]
-        x4, y4 = w*outputs[0][8][0][0], h*outputs[0][9][0][0]
-        print(x0, x1, x2, x3, x3, x4)
-        print(y0, y1, y2, y3, y3, y4)
-        image = cv2.circle(image, (int(x0), int(y0)), 10, (255, 0, 100), 2)
-        image = cv2.circle(image, (int(x1), int(y1)), 10, (255, 0, 100), 2)
-        image = cv2.circle(image, (int(x2), int(y2)), 10, (255, 0, 100), 2)
-        image = cv2.circle(image, (int(x3), int(y3)), 10, (255, 0, 100), 2)
-        image = cv2.circle(image, (int(x4), int(y4)), 10, (255, 0, 100), 2)
-        cv2.imshow('Landmarks', image)
-        return
+        x0, y0 = int(w*outputs[0][0][0][0]), int(h*outputs[0][1][0][0])
+        x1, y1 = int(w*outputs[0][2][0][0]), int(h*outputs[0][3][0][0])
+        right_eye = image[y0-30: y0+30, x0-30:x0+30]
+        left_eye = image[y1 - 30: y1 + 30, x1 - 30:x1 + 30]
+
+        return right_eye, left_eye
+
         raise NotImplementedError

@@ -3,7 +3,10 @@ This is a sample class for a model. You may choose to use it as-is or make any c
 This has been provided just to give you an idea of how to structure your model class.
 '''
 from openvino.inference_engine import IENetwork, IECore
+from src.gaze_estimation import GazeEstimation
 import cv2
+
+ge = GazeEstimation('models/intel/gaze-estimation-adas-0002/FP32/gaze-estimation-adas-0002', device='CPU')
 
 
 class HeadPoseEstimation:
@@ -51,6 +54,7 @@ class HeadPoseEstimation:
             results_three = network.requests[0].outputs[output_name_three]
 
         return results_one, results_two, results_three
+
         raise NotImplementedError
 
     def check_model(self):
@@ -84,8 +88,8 @@ class HeadPoseEstimation:
         you might have to preprocess the output. This function is where you can do that.
         '''
         yaw, pitch, roll = self.predict(image)
-        print('yaw: ', yaw[0][0])
-        print('pitch: ', pitch[0][0])
-        print('roll: ', roll[0][0])
-        return
+        angles = [yaw[0], pitch[0], roll[0]]
+
+        return angles
+
         raise NotImplementedError

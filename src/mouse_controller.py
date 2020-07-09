@@ -20,3 +20,4 @@ class MouseController:
 
     def move(self, x, y):
         pyautogui.moveRel(x*self.precision, -1*y*self.precision, duration=self.speed)
+        pyautogui.FAILSAFE = False

@@ -4,6 +4,7 @@ This has been provided just to give you an idea of how to structure your model c
 '''
 from openvino.inference_engine import IENetwork, IECore
 import cv2
+import numpy as np
 
 
 class GazeEstimation:
@@ -33,31 +34,46 @@ class GazeEstimation:
         return self.net
         raise NotImplementedError
 
-    def predict(self, image):
+    def predict(self, right_eye, left_eye, head_angles):
         '''
         TODO: You will need to complete this method.
         This method is meant for running predictions on the input image.
         '''
+        right, left, angles = self.preprocess_input(right_eye, left_eye, head_angles)
+        network = self.load_model()
+        input_dict = {'right_eye_image': right, 'left_eye_image': left, 'head_pose_angles': angles}
+        network.start_async(request_id=0, inputs=input_dict)
+        if network.requests[0].wait(-1) == 0:
+            results = network.requests[0].outputs['gaze_vector']
+
+        return self.preprocess_output(results)
+
         raise NotImplementedError
 
     def check_model(self):
-        input_name = next(iter(self.net.inputs))
-        input_shape = self.net.inputs[input_name].shape
         output_name = next(iter(self.net.outputs))
         output_shape = self.net.outputs[output_name].shape
-        return input_name, input_shape, output_name, output_shape
+        return self.net.inputs, output_name, output_shape
         raise NotImplementedError
 
-    def preprocess_input(self, image):
+    def preprocess_input(self, right_eye, left_eye, angles):
         '''
         Before feeding the data into the model for inference,
         you might have to preprocess it. This function is where you can do that.
         '''
-        input_name, input_shape, output_name, output_shape = self.check_model()
-        image = cv2.resize(image, (input_shape[3], input_shape[2]), interpolation=cv2.INTER_AREA)
-        image = image.transpose((2, 0, 1))
-        image = image.reshape(1, *image.shape)
-        return image
+        if right_eye.any() and left_eye.any():
+            right_eye = cv2.resize(right_eye, (60, 60), interpolation=cv2.INTER_AREA)
+            right_eye = right_eye.transpose((2, 0, 1))
+            right_eye = right_eye.reshape(1, *right_eye.shape)
+
+            left_eye = cv2.resize(left_eye, (60, 60), interpolation=cv2.INTER_AREA)
+            left_eye = left_eye.transpose((2, 0, 1))
+            left_eye = left_eye.reshape(1, *left_eye.shape)
+
+            angles = np.array([angles[0], angles[1], angles[2]])
+            angles = angles.reshape(1, 3)
+
+        return right_eye, left_eye, angles
         raise NotImplementedError
 
     def preprocess_output(self, outputs):
@@ -65,4 +81,7 @@ class GazeEstimation:
         Before feeding the output of this model to the next model,
         you might have to preprocess the output. This function is where you can do that.
         '''
+
+        return outputs
+
         raise NotImplementedError

@@ -3,8 +3,14 @@ This is a sample class for a model. You may choose to use it as-is or make any c
 This has been provided just to give you an idea of how to structure your model class.
 '''
 from openvino.inference_engine import IENetwork, IECore
+from src.head_pose_estimation import HeadPoseEstimation
+from src.facial_landmarks_detection import FacialLandmarksDetection
 import cv2
 
+hpe = HeadPoseEstimation('models/intel/head-pose-estimation'
+                       '-adas-0001/FP32/head-pose-estimation-adas-0001', device='CPU')
+fld = FacialLandmarksDetection('models/intel/landmarks-regression-retail-0009/FP32/'
+                             'landmarks-regression-retail-0009', device='CPU')
 
 class FaceDetection:
     '''
@@ -89,11 +95,9 @@ class FaceDetection:
                 y_min = int(h * character[4])
                 x_max = int(w * character[5])
                 y_max = int(h * character[6])
-                image = cv2.rectangle(img=image, pt1=(x_min, y_min), pt2=(x_max, y_max), color=(0, 0, 255), thickness=2)
-                crop = image[y_min:y_max, x_min:x_max]
+                crop = image[y_min-40:y_max+40, x_min-50:x_max+50]
                 cv2.imshow('Cropped', crop)
-                return crop
-            cv2.imshow('image', image)
 
-        #return crop
-        #raise NotImplementedError
+        return crop
+
+        raise NotImplementedError
