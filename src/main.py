@@ -13,10 +13,10 @@ def main(args):
     fd = FaceDetection('models/intel/face-detection-adas-binary-0001/FP32-'
                        'INT1/face-detection-adas-binary-0001', device='CPU')
     hpe = HeadPoseEstimation('models/intel/head-pose-estimation'
-                       '-adas-0001/FP16/head-pose-estimation-adas-0001', device='CPU')
-    fld = FacialLandmarksDetection('models/intel/landmarks-regression-retail-0009/FP16/'
+                       '-adas-0001/FP16-INT8/head-pose-estimation-adas-0001', device='CPU')
+    fld = FacialLandmarksDetection('models/intel/landmarks-regression-retail-0009/FP16-INT8/'
                              'landmarks-regression-retail-0009', device='CPU')
-    ge = GazeEstimation('models/intel/gaze-estimation-adas-0002/FP16/'
+    ge = GazeEstimation('models/intel/gaze-estimation-adas-0002/FP16-INT8/'
                         'gaze-estimation-adas-0002', device='CPU')
     mc = MouseController('medium', 'fast')
 

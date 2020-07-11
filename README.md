@@ -138,7 +138,8 @@ The face detection model uses one precision, that is, FP32-INT1. The loading tim
 
 ### FP16-INT8 Results
 - Below are the results for running the project using FP16-INT8 as the model precision
-
+    ![FP16-INT8 Results](bin/images/fp16-int8_results.png)
+    
     - Facial Landmarks Detection Model Deep Learning Workbench results using FP32 as the model precision
        ![Facial Landmarks FP16-INT8 DL Workbench Results](bin/images/fld_fp16-int8_results.png)
        
