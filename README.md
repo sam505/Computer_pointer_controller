@@ -54,7 +54,7 @@ loading the input file and the last one controls the computer pointer.
 
 ## Demo
 
-There are two ways to run this project. 
+These are the possible ways to run this project. 
 - Running the [main](src/main.py) python file using a command line argument.
 Before that, assuming that you have already installed the [OpenVINO Toolkit](https://docs.openvinotoolkit.org/latest/index.html),
 source the OpenVINO Environment using
@@ -154,11 +154,36 @@ The face detection model uses one precision, that is, FP32-INT1. The loading tim
 For instance, explain why there is difference in inference time for FP32, FP16 and INT8 models.
 
 ## Stand Out Suggestions
-This is where you can provide information about the stand out suggestions that you have attempted.
-
+- ### Build an Inference Pipeline for both video file and webcam feed as input:
+    I have given the user an option to choose the type of media they would like to feed to the project by the use of a 
+command line argument. Besides that, the user can also add the path to another video file or image file
+ using a command line argument.
+ 
+- ### Can you improve your inference speed without significant drop in performance by changing the precision of the models?
+    It is possible to improve the inference speed without experiencing a significant drop in performance. 
+    I have run the app using different models precisions and calculated the time it takes to obtain results on 
+    different model precision combinations. I have run the project with FP32 for all models and the time taken to run 
+    inference on all 4 models and obtain results ranges from `1.2277 - 1.2416 seconds`. The average is `1.23465 seconds`
+    
+    When using FP16 as the models precision, the total time taken to run an inference on all models ranges from
+    `1.2216 - 1.2251 seconds`. The average is `1.22335 seconds`
+    
+    Lastly, when using the FP16-INT8 models precision, the total time taken to run one inference across all models 
+    ranges from `1.2108 - 1.2259 seconds`. The average is `1.21835 seconds`
+    
+    Clearly, it is possible to improve the general performance of the project by reducing the model precision
+     and the performance will almost be the same. There are no instances where a face was not detected or the mouse
+      failed to move while running on FP16-INT8 as the models precision.
 ### Async Inference
-If you have used Async Inference in your code, benchmark the results and explain its effects on power and 
-performance of your project.
+   If you have used Async Inference in your code, benchmark the results and explain its effects on power and 
+    performance of your project.
+    
+   I have used Async Inference to load each frame per model and obtain the results. This ensures that the time taken to 
+   run the app is quite small compared to when running synchronous inference requests. It is efficient in that the mouse 
+   controller does not have to wait for inference to be performed and results obtained on all the models. Inference is 
+   performed on a single frame and the results sent to the relevant model, inference starts on that model sending results 
+   to the next model and the results sent to the pointer controller python file. This reduces the time it takes to run the 
+   project, and as a result, saving the power consumed and having a significant boost on the performance.
 
 ### Edge Cases
 There will be certain situations that will break your inference flow. For instance, 
