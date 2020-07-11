@@ -151,9 +151,21 @@ The face detection model uses one precision, that is, FP32-INT1. The loading tim
       ![Gaze Estimation FP16-INT8 DL Workbench results](bin/images/ge_fp16-int8_results.png)
 
 ## Results
-*TODO:* Discuss the benchmark results and explain why you are getting the results you are getting. 
-For instance, explain why there is difference in inference time for FP32, FP16 and INT8 models.
 
+   In the benchmark results, it has been illustrated that the project will take less time to run an inference and obtain 
+   results using a lower precision value of the models, that is, the FP16-INT8. As the value of the model precision used 
+   gets lower, the performance of the project in terms of `fps` improves.
+
+   FP32 model precision store large weight values compared to FP16 and INT8 model precision. This factor makes them 
+   resource intensive when working with such models. Storing large values makes them bigger that the other two model 
+   precisions and will take longer time to execute.
+ 
+   For the FP16 model precisions, store have the amount of weight values as compared to FP32 models. This makes the faster 
+   than the FP32 due to the size and less compute power required.
+ 
+   INT8 Models are the fastest to execute and have the best performance in terms of `fps`. This is because they have the 
+   least weight values requiring less resources to execute them and less storage space.
+   
 ## Stand Out Suggestions
 - ### Build an Inference Pipeline for both video file and webcam feed as input:
     I have given the user an option to choose the type of media they would like to feed to the project by the use of a 

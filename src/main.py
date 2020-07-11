@@ -56,8 +56,6 @@ def main(args):
         except AttributeError:
             run_if_no_face_detected()
 
-
-
     run_if_no_face_detected()
 
 
