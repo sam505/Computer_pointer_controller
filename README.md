@@ -45,14 +45,14 @@ loading the input file and the last one controls the computer pointer.
 
 - There is a [Readme](README.md) and a [requirements file](requirements.txt)
 
-To install the required packages listen in the requirements file use
- ```commandline
-pip install PACKAGE_NAME
-```
+    To install the required packages listen in the requirements file use
+    
+     ```commandline
+    pip install PACKAGE_NAME
+    ```
 
 
 ## Demo
-*TODO:* Explain how to run a basic demo of your model.
 
 There are two ways to run this project. 
 - Running the [main](src/main.py) python file using a command line argument.
@@ -82,8 +82,6 @@ Afterwards, run the main python file using either of the following command lines
         python src/main.py --input_type image --input_file path_to_image_file
         ```
 ## Documentation
-*TODO:* Include any documentation that users might need to better understand your project code. 
-For instance, this is a good place to explain the command line arguments that your project supports.
 
 The project requires different command line arguments depending on your desired input file to the project. 
 - While using the webcam as the input feed source, to run the main python file, a command line argument `--input_type` 
@@ -101,6 +99,54 @@ has to be added with the parameter `cam` to specify the input type as webcam.
 ## Benchmarks
 *TODO:* Include the benchmark results of running your model on multiple hardwares and multiple model precisions. 
 Your benchmarks can include: model loading time, input/output processing time, model inference time etc.
+### FP32 Results
+The face detection model uses one precision, that is, FP32-INT1. The loading time and the inference time for the
+ model remains the same.
+ 
+- Results for all the models have been calculated while running the project and are as shown below.
+ 
+     ![FP32 results](bin/images/fp32_results.png)
+
+   - Face Detection Model Deep Learning Workbench Results using FP32-INT1 as the model precision.
+ 
+     ![Face Detection Model results](bin/images/fd_results.png)
+
+   - Facial Landmarks Detection Model Deep Learning Workbench results using FP32 as the model precision
+     ![Facial Landmarks FP32 DL Workbench Results](bin/images/fld_fp32_results.png)
+   
+   - Head Pose Estimation Model Deep Learning Workbench Results using FP32 as the model precision
+   
+     ![Head Pose Estimation FP32 DL Workbench results](bin/images/hpe_fp32_results.png)
+   
+   - Gaze Estimation Model Deep Learning Workbench Results using FP32 as the model precision
+ 
+     ![Gaze Estimation FP32 DL Workbench results](bin/images/ge_fp32_results.png)
+ 
+### FP16 Results
+- Below are the results for running the project using FP16 as the model precision
+ 
+    ![FP16 results](bin/images/fp16_results.png)
+    
+    - Facial Landmarks Detection Model Deep Learning Workbench results using FP32 as the model precision
+      ![Facial Landmarks FP16 DL Workbench Results](bin/images/fld_fp16_results.png)
+    
+    - Head Pose Estimation Model Deep Learning Workbench Results using FP32 as the model precision
+      ![Head Pose Estimation FP16 DL Workbench results](bin/images/hpe_fp16_results.png)
+      
+    - Gaze Estimation Model Deep Learning Workbench Results using FP32 as the model precision
+      ![Gaze Estimation FP16 DL Workbench results](bin/images/ge_fp16_results.png)
+
+### FP16-INT8 Results
+- Below are the results for running the project using FP16-INT8 as the model precision
+
+    - Facial Landmarks Detection Model Deep Learning Workbench results using FP32 as the model precision
+       ![Facial Landmarks FP16-INT8 DL Workbench Results](bin/images/fld_fp16-int8_results.png)
+       
+    - Head Pose Estimation Model Deep Learning Workbench Results using FP32 as the model precision
+      ![Head Pose Estimation FP16-INT8 DL Workbench results](bin/images/hpe_fp16-int8_results.png)
+      
+    - Gaze Estimation Model Deep Learning Workbench Results using FP32 as the model precision
+      ![Gaze Estimation FP16-INT8 DL Workbench results](bin/images/ge_fp16-int8_results.png)
 
 ## Results
 *TODO:* Discuss the benchmark results and explain why you are getting the results you are getting. 

@@ -5,8 +5,7 @@ This has been provided just to give you an idea of how to structure your model c
 from openvino.inference_engine import IENetwork, IECore
 from src.gaze_estimation import GazeEstimation
 import cv2
-
-ge = GazeEstimation('models/intel/gaze-estimation-adas-0002/FP32/gaze-estimation-adas-0002', device='CPU')
+import time
 
 
 class FacialLandmarksDetection:
@@ -21,6 +20,7 @@ class FacialLandmarksDetection:
         self.model_structure = model_name + '.bin'
         self.device = device
         self.net = None
+        self.count = 0
         return
         raise NotImplementedError
 
@@ -31,10 +31,15 @@ class FacialLandmarksDetection:
         If your model requires any Plugins, this is where you can load them.
         '''
         core = IECore()
+        start = time.time()
         model = core.read_network(self.model_weights, self.model_structure)
         print('Loading the Facial Landmarks Detection Model...')
         self.net = core.load_network(network=model, device_name='CPU', num_requests=1)
+        print('Time taken to load the model is: {:.4f} seconds'.format(time.time()-start))
+        print("")
+
         return self.net
+
         raise NotImplementedError
 
     def predict(self, image):
@@ -46,8 +51,12 @@ class FacialLandmarksDetection:
         input_name, input_shape, output_name, output_shape = self.check_model()
         input_dict = {input_name: processed_image}
         self.net.start_async(request_id=0, inputs=input_dict)
+        self.count += 1
+        start = time.time()
         if self.net.requests[0].wait(-1) == 0:
             results = self.net.requests[0].outputs[output_name]
+
+            print('Facial Landmarks Detection Inference speed is: {:.3f} fps'.format(1 / (time.time() - start)))
 
         return results
 

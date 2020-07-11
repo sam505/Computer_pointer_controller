@@ -5,6 +5,7 @@ This has been provided just to give you an idea of how to structure your model c
 from openvino.inference_engine import IENetwork, IECore
 import cv2
 import numpy as np
+import time
 
 
 class GazeEstimation:
@@ -29,9 +30,12 @@ class GazeEstimation:
         If your model requires any Plugins, this is where you can load them.
         '''
         core = IECore()
+        start = time.time()
         print('Loading the Gaze Estimation Model...')
         model = core.read_network(self.model_weights, self.model_structure)
         self.net = core.load_network(network=model, device_name='CPU', num_requests=1)
+        print('Time taken to load the model is: {:.4f} seconds'.format(time.time()-start))
+        print("")
         return self.net
         raise NotImplementedError
 
@@ -42,8 +46,10 @@ class GazeEstimation:
         '''
         right, left, angles = self.preprocess_input(right_eye, left_eye, head_angles)
         input_dict = {'right_eye_image': right, 'left_eye_image': left, 'head_pose_angles': angles}
+        start = time.time()
         self.net.start_async(request_id=0, inputs=input_dict)
         if self.net.requests[0].wait(-1) == 0:
+            print('Gaze Estimation Model Inference speed is: {:.3f} fps'.format(1 / (time.time() - start)))
             results = self.net.requests[0].outputs['gaze_vector']
 
         return self.preprocess_output(results)

@@ -6,11 +6,8 @@ from openvino.inference_engine import IENetwork, IECore
 from src.head_pose_estimation import HeadPoseEstimation
 from src.facial_landmarks_detection import FacialLandmarksDetection
 import cv2
+import time
 
-hpe = HeadPoseEstimation('models/intel/head-pose-estimation'
-                       '-adas-0001/FP32/head-pose-estimation-adas-0001', device='CPU')
-fld = FacialLandmarksDetection('models/intel/landmarks-regression-retail-0009/FP32/'
-                             'landmarks-regression-retail-0009', device='CPU')
 
 class FaceDetection:
     '''
@@ -25,6 +22,7 @@ class FaceDetection:
         self.model_structure = model_name + '.bin'
         self.device = device
         self.net = None
+        self.count = 0
 
         return
 
@@ -39,9 +37,12 @@ class FaceDetection:
         '''
 
         core = IECore()
+        start = time.time()
         model = core.read_network(self.model_weights, self.model_structure)
         print("Loading the Face Detection Model...")
         self.net = core.load_network(network=model, device_name='CPU', num_requests=1)
+        print('Time taken to load the model is: {:.4f} seconds'.format(time.time() - start))
+        print("")
 
         return self.net
 
@@ -55,9 +56,12 @@ class FaceDetection:
         processed_image = self.preprocess_input(image)
         input_name, input_shape, output_name, output_shape = self.check_model()
         input_dict = {input_name: processed_image}
+        start = time.time()
         self.net.start_async(request_id=0, inputs=input_dict)
+        self.count += 1
         if self.net.requests[0].wait(-1) == 0:
             results = self.net.requests[0].outputs[output_name]
+            print('Face Detection Model Inference speed is: {:.3f} fps'.format(1 / (time.time()-start)))
 
         return results
 
@@ -80,7 +84,6 @@ class FaceDetection:
         '''
         input_name, input_shape, output_name, output_shape = self.check_model()
         image = cv2.resize(image, (input_shape[3], input_shape[2]), interpolation=cv2.INTER_AREA)
-        cv2.imshow('Raw', image)
         image = image.transpose((2, 0, 1))
         image = image.reshape(1, *image.shape)
 
@@ -101,8 +104,7 @@ class FaceDetection:
                 y_min = int(h * character[4])
                 x_max = int(w * character[5])
                 y_max = int(h * character[6])
-                crop = image[y_min-40:y_max+40, x_min-50:x_max+50]
-                cv2.imshow('Cropped', crop)
+                crop = image[y_min - 40:y_max + 40, x_min - 50:x_max + 50]
 
         return crop
 
