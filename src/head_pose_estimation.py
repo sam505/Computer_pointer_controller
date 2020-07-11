@@ -31,6 +31,7 @@ class HeadPoseEstimation:
         If your model requires any Plugins, this is where you can load them.
         '''
         core = IECore()
+        print("Loading the Head Pose Estimation Model...")
         model = core.read_network(self.model_weights, self.model_structure)
         self.net = core.load_network(network=model, device_name='CPU', num_requests=1)
         return self.net
@@ -42,16 +43,15 @@ class HeadPoseEstimation:
         TODO: You will need to complete this method.
         This method is meant for running predictions on the input image.
         '''
-        network = self.load_model()
         processed_image = self.preprocess_input(image)
         input_name, input_shape, output_name_one, output_name_two, output_name_three, output_shape_one, \
         output_shape_two, output_shape_three = self.check_model()
         input_dict = {input_name: processed_image}
-        network.start_async(request_id=0, inputs=input_dict)
-        if network.requests[0].wait(-1) == 0:
-            results_one = network.requests[0].outputs[output_name_one]
-            results_two = network.requests[0].outputs[output_name_two]
-            results_three = network.requests[0].outputs[output_name_three]
+        self.net.start_async(request_id=0, inputs=input_dict)
+        if self.net.requests[0].wait(-1) == 0:
+            results_one = self.net.requests[0].outputs[output_name_one]
+            results_two = self.net.requests[0].outputs[output_name_two]
+            results_three = self.net.requests[0].outputs[output_name_three]
 
         return results_one, results_two, results_three
 

@@ -25,7 +25,9 @@ class FaceDetection:
         self.model_structure = model_name + '.bin'
         self.device = device
         self.net = None
+
         return
+
         raise NotImplementedError
 
     def load_model(self):
@@ -38,7 +40,9 @@ class FaceDetection:
 
         core = IECore()
         model = core.read_network(self.model_weights, self.model_structure)
+        print("Loading the Face Detection Model...")
         self.net = core.load_network(network=model, device_name='CPU', num_requests=1)
+
         return self.net
 
         raise NotImplementedError
@@ -48,13 +52,12 @@ class FaceDetection:
         TODO: You will need to complete this method.
         This method is meant for running predictions on the input image.
         '''
-        network = self.load_model()
         processed_image = self.preprocess_input(image)
         input_name, input_shape, output_name, output_shape = self.check_model()
         input_dict = {input_name: processed_image}
-        network.start_async(request_id=0, inputs=input_dict)
-        if network.requests[0].wait(-1) == 0:
-            results = network.requests[0].outputs[output_name]
+        self.net.start_async(request_id=0, inputs=input_dict)
+        if self.net.requests[0].wait(-1) == 0:
+            results = self.net.requests[0].outputs[output_name]
 
         return results
 
@@ -65,6 +68,7 @@ class FaceDetection:
         input_shape = self.net.inputs[input_name].shape
         output_name = next(iter(self.net.outputs))
         output_shape = self.net.outputs[output_name].shape
+
         return input_name, input_shape, output_name, output_shape
 
         raise NotImplementedError
@@ -79,7 +83,9 @@ class FaceDetection:
         cv2.imshow('Raw', image)
         image = image.transpose((2, 0, 1))
         image = image.reshape(1, *image.shape)
+
         return image
+
         raise NotImplementedError
 
     def preprocess_output(self, image):

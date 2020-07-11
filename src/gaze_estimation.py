@@ -29,6 +29,7 @@ class GazeEstimation:
         If your model requires any Plugins, this is where you can load them.
         '''
         core = IECore()
+        print('Loading the Gaze Estimation Model...')
         model = core.read_network(self.model_weights, self.model_structure)
         self.net = core.load_network(network=model, device_name='CPU', num_requests=1)
         return self.net
@@ -40,11 +41,10 @@ class GazeEstimation:
         This method is meant for running predictions on the input image.
         '''
         right, left, angles = self.preprocess_input(right_eye, left_eye, head_angles)
-        network = self.load_model()
         input_dict = {'right_eye_image': right, 'left_eye_image': left, 'head_pose_angles': angles}
-        network.start_async(request_id=0, inputs=input_dict)
-        if network.requests[0].wait(-1) == 0:
-            results = network.requests[0].outputs['gaze_vector']
+        self.net.start_async(request_id=0, inputs=input_dict)
+        if self.net.requests[0].wait(-1) == 0:
+            results = self.net.requests[0].outputs['gaze_vector']
 
         return self.preprocess_output(results)
 

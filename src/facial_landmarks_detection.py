@@ -32,6 +32,7 @@ class FacialLandmarksDetection:
         '''
         core = IECore()
         model = core.read_network(self.model_weights, self.model_structure)
+        print('Loading the Facial Landmarks Detection Model...')
         self.net = core.load_network(network=model, device_name='CPU', num_requests=1)
         return self.net
         raise NotImplementedError
@@ -41,13 +42,12 @@ class FacialLandmarksDetection:
         TODO: You will need to complete this method.
         This method is meant for running predictions on the input image.
         '''
-        network = self.load_model()
         processed_image = self.preprocess_input(image)
         input_name, input_shape, output_name, output_shape = self.check_model()
         input_dict = {input_name: processed_image}
-        network.start_async(request_id=0, inputs=input_dict)
-        if network.requests[0].wait(-1) == 0:
-            results = network.requests[0].outputs[output_name]
+        self.net.start_async(request_id=0, inputs=input_dict)
+        if self.net.requests[0].wait(-1) == 0:
+            results = self.net.requests[0].outputs[output_name]
 
         return results
 
@@ -84,7 +84,6 @@ class FacialLandmarksDetection:
         '''
         outputs = self.predict(image)
         h, w, c = image.shape
-        print('landmark output_2: ', outputs)
         x0, y0 = int(w*outputs[0][0][0][0]), int(h*outputs[0][1][0][0])
         x1, y1 = int(w*outputs[0][2][0][0]), int(h*outputs[0][3][0][0])
         right_eye = image[y0-30: y0+30, x0-30:x0+30]

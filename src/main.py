@@ -4,9 +4,10 @@ from src.head_pose_estimation import HeadPoseEstimation
 from src.facial_landmarks_detection import FacialLandmarksDetection
 from src.gaze_estimation import GazeEstimation
 from src.mouse_controller import MouseController
+import argparse
 
 
-def main():
+def main(args):
     fd = FaceDetection('models/intel/face-detection-adas-binary-0001/FP32-'
                        'INT1/face-detection-adas-binary-0001', device='CPU')
     hpe = HeadPoseEstimation('models/intel/head-pose-estimation'
@@ -17,9 +18,14 @@ def main():
                         'gaze-estimation-adas-0002', device='CPU')
     mc = MouseController('medium', 'fast')
 
-    feed = InputFeeder(input_type='video', input_file='bin/demo.mp4')
+    feed = InputFeeder(input_type=args.input_type, input_file=args.input_file)
 
     feed.load_data()
+
+    fd.load_model()
+    fld.load_model()
+    hpe.load_model()
+    ge.load_model()
 
     for batch in feed.next_batch():
         if batch.any():
@@ -33,4 +39,10 @@ def main():
 
 
 if __name__ == '__main__':
-    main()
+    parser = argparse.ArgumentParser()
+    parser.add_argument('--input_type', required=True, help='Enter the type of input either video, cam or image')
+    parser.add_argument('--input_file', default='bin/demo.mp4', help='Enter the directory path for the input file')
+
+    args = parser.parse_args()
+
+    main(args)

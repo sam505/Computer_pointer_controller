@@ -39,10 +39,10 @@ class InputFeeder:
             for _ in range(10):
                 _, frame = self.cap.read()
 
-                key = cv2.waitKey(6)
+                key = cv2.waitKey(1)
+                if key == ord('q'):
+                    break
             yield frame
-            if key == ord('q'):
-                break
 
     def close(self):
         '''
