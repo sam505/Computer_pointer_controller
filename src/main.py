@@ -29,34 +29,41 @@ def main(args):
     hpe.load_model()
     ge.load_model()
 
-    for batch in feed.next_batch():
-        if batch.any():
-            start = time.time()
-            cropped = fd.preprocess_output(image=batch)
-            key = cv2.waitKey(1)
-            stream = cv2.waitKey(1)
-            not_stream = cv2.waitKey(1)
-            raw = cv2.resize(batch, (720, 480), interpolation=cv2.INTER_AREA)
-            right_eye, left_eye = fld.preprocess_output(cropped)
-            head_angles = hpe.preprocess_output(cropped)
-            coordinates = ge.predict(right_eye, left_eye, head_angles)
-            mc.move(coordinates[0][0], coordinates[0][1])
-            print('The total time taken to obtain results is: {:.4f} seconds'.format(time.time()-start))
-            print("")
-            if key == ord('q'):
-                break
-        if not_stream != ord('t') and (stream == ord('w') or not_stream != ord('t')):
-            cv2.imshow('Raw', raw)
-        if stream != ord('w') and not_stream == ord('t'):
-            cv2.destroyAllWindows()
-    feed.close()
+    def run_if_no_face_detected():
+        try:
+            for batch in feed.next_batch():
+                start = time.time()
+                cropped = fd.preprocess_output(image=batch)
+                print(cropped.shape)
+                key = cv2.waitKey(1)
+                stream = cv2.waitKey(1)
+                not_stream = cv2.waitKey(1)
+                raw = cv2.resize(batch, (720, 480), interpolation=cv2.INTER_AREA)
+                if cropped.shape[2] == 3:
+                    right_eye, left_eye = fld.preprocess_output(cropped)
+                    head_angles = hpe.preprocess_output(cropped)
+                    coordinates = ge.predict(right_eye, left_eye, head_angles)
+                    mc.move(coordinates[0][0], coordinates[0][1])
+                    print('The total time taken to obtain results is: {:.4f} seconds'.format(time.time()-start))
+                    print("")
+                    if key == ord('q'):
+                        break
+                    if not_stream != ord('t') and (stream == ord('w') or not_stream != ord('t')):
+                        cv2.imshow('Raw', raw)
+                    if stream != ord('w') and not_stream == ord('t'):
+                        cv2.destroyAllWindows()
+            feed.close()
+        except AttributeError:
+            run_if_no_face_detected()
+
+
+
+    run_if_no_face_detected()
 
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument('--input_type', required=True, help='Enter the type of input either video, cam or image')
     parser.add_argument('--input_file', default='bin/demo.mp4', help='Enter the directory path for the input file')
-
     args = parser.parse_args()
-
     main(args)

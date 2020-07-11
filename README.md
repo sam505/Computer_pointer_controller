@@ -176,9 +176,7 @@ command line argument. Besides that, the user can also add the path to another v
      and the performance will almost be the same. There are no instances where a face was not detected or the mouse
       failed to move while running on FP16-INT8 as the models precision.
 ### Async Inference
-   If you have used Async Inference in your code, benchmark the results and explain its effects on power and 
-    performance of your project.
-    
+
    I have used Async Inference to load each frame per model and obtain the results. This ensures that the time taken to 
    run the app is quite small compared to when running synchronous inference requests. It is efficient in that the mouse 
    controller does not have to wait for inference to be performed and results obtained on all the models. Inference is 
@@ -190,3 +188,17 @@ command line argument. Besides that, the user can also add the path to another v
 There will be certain situations that will break your inference flow. For instance, 
 lighting changes or multiple people in the frame. Explain some of the edge cases you encountered in your project 
 and how you solved them to make your project more robust.
+
+There are instances that will result in the inference flow breaking. In low lighting while using the webcam, 
+if the face detection model results no coordinates for a phase in 10 consecutive frames of the input feed, the 
+inference flow breaks.
+
+If there is no person on the video frame, meaning that no face will be detected for next 10 consecutive frames, the 
+inference flow used to break and no inputs are fed to the facial landmarks detection and head pose estimation models.
+
+I overcame this challenge by creating a function that executes on the first frame and initiates the program to check 
+if there is a face in the frame. When there is no face detected on the frame, the program encounters an AttributeError.
+Immediately after the function is called there is a try block that ensures that the program runs if there is a face 
+detected and no AttributeError experienced. In case there occurs and AttributeError, the program excepts the error and 
+calls the function that reads video frames and feeds them to the face detection model. The program will continue running
+ even when there is no face being detected in the current frame.

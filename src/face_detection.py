@@ -97,15 +97,14 @@ class FaceDetection:
         you might have to preprocess the output. This function is where you can do that.
         '''
         outputs = self.predict(image)
+        h, w, c = image.shape
         for character in (outputs[0][0]):
             if character[2] > 0.6:
-                h, w, c = image.shape
                 x_min = int(w * character[3])
                 y_min = int(h * character[4])
                 x_max = int(w * character[5])
                 y_max = int(h * character[6])
                 crop = image[y_min - 40:y_max + 40, x_min - 50:x_max + 50]
+                return crop
 
-        return crop
-
-        raise NotImplementedError
+        # raise NotImplementedError
