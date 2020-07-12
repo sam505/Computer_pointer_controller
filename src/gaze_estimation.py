@@ -4,6 +4,7 @@ This has been provided just to give you an idea of how to structure your model c
 '''
 from openvino.inference_engine import IENetwork, IECore
 import cv2
+import pprint
 import numpy as np
 import time
 
@@ -39,19 +40,21 @@ class GazeEstimation:
         return self.net
         raise NotImplementedError
 
-    def predict(self, right_eye, left_eye, head_angles):
+    def predict(self, right_eye, left_eye, head_angles, results):
         '''
         TODO: You will need to complete this method.
         This method is meant for running predictions on the input image.
         '''
+        pp = pprint.PrettyPrinter()
         right, left, angles = self.preprocess_input(right_eye, left_eye, head_angles)
         input_dict = {'right_eye_image': right, 'left_eye_image': left, 'head_pose_angles': angles}
         start = time.time()
-        self.net.start_async(request_id=0, inputs=input_dict)
+        infer = self.net.start_async(request_id=0, inputs=input_dict)
         if self.net.requests[0].wait(-1) == 0:
             print('Gaze Estimation Model Inference speed is: {:.3f} fps'.format(1 / (time.time() - start)))
             results = self.net.requests[0].outputs['gaze_vector']
-
+        if results == 'yes':
+            pp.pprint(infer.get_perf_counts())
         return self.preprocess_output(results)
 
         raise NotImplementedError

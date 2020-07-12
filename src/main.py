@@ -29,20 +29,21 @@ def main(args):
     hpe.load_model()
     ge.load_model()
 
+    results_status = args.show_results
+
     def run_if_no_face_detected():
         try:
             for batch in feed.next_batch():
                 start = time.time()
-                cropped = fd.preprocess_output(image=batch)
-                print(cropped.shape)
+                cropped = fd.preprocess_output(batch, results_status)
                 key = cv2.waitKey(1)
                 stream = cv2.waitKey(1)
                 not_stream = cv2.waitKey(1)
                 raw = cv2.resize(batch, (720, 480), interpolation=cv2.INTER_AREA)
                 if cropped.shape[2] == 3:
-                    right_eye, left_eye = fld.preprocess_output(cropped)
-                    head_angles = hpe.preprocess_output(cropped)
-                    coordinates = ge.predict(right_eye, left_eye, head_angles)
+                    right_eye, left_eye = fld.preprocess_output(cropped, results_status)
+                    head_angles = hpe.preprocess_output(cropped, results_status)
+                    coordinates = ge.predict(right_eye, left_eye, head_angles, results_status)
                     mc.move(coordinates[0][0], coordinates[0][1])
                     print('The total time taken to obtain results is: {:.4f} seconds'.format(time.time()-start))
                     print("")
@@ -63,5 +64,6 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument('--input_type', required=True, help='Enter the type of input either video, cam or image')
     parser.add_argument('--input_file', default='bin/demo.mp4', help='Enter the directory path for the input file')
+    parser.add_argument('--show_results', default='no', help='Enter yes to show and no to hide performance results')
     args = parser.parse_args()
     main(args)

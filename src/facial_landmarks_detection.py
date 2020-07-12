@@ -3,7 +3,7 @@ This is a sample class for a model. You may choose to use it as-is or make any c
 This has been provided just to give you an idea of how to structure your model class.
 '''
 from openvino.inference_engine import IENetwork, IECore
-from src.gaze_estimation import GazeEstimation
+import pprint
 import cv2
 import time
 
@@ -42,21 +42,23 @@ class FacialLandmarksDetection:
 
         raise NotImplementedError
 
-    def predict(self, image):
+    def predict(self, image, results):
         '''
         TODO: You will need to complete this method.
         This method is meant for running predictions on the input image.
         '''
+        pp = pprint.PrettyPrinter()
         processed_image = self.preprocess_input(image)
         input_name, input_shape, output_name, output_shape = self.check_model()
         input_dict = {input_name: processed_image}
-        self.net.start_async(request_id=0, inputs=input_dict)
+        infer = self.net.start_async(request_id=0, inputs=input_dict)
         self.count += 1
         start = time.time()
         if self.net.requests[0].wait(-1) == 0:
             results = self.net.requests[0].outputs[output_name]
-
-            print('Facial Landmarks Detection Inference speed is: {:.3f} fps'.format(1 / (time.time() - start)))
+        if results == 'yes':
+            pp.pprint(infer.get_perf_counts())
+        print('Facial Landmarks Detection Inference speed is: {:.3f} fps'.format(1 / (time.time() - start)))
 
         return results
 
@@ -86,12 +88,12 @@ class FacialLandmarksDetection:
 
         raise NotImplementedError
 
-    def preprocess_output(self, image):
+    def preprocess_output(self, image, results):
         '''
         Before feeding the output of this model to the next model,
         you might have to preprocess the output. This function is where you can do that.
         '''
-        outputs = self.predict(image)
+        outputs = self.predict(image, results)
         h, w, c = image.shape
         x0, y0 = int(w*outputs[0][0][0][0]), int(h*outputs[0][1][0][0])
         x1, y1 = int(w*outputs[0][2][0][0]), int(h*outputs[0][3][0][0])

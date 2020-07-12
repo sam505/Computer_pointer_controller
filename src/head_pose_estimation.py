@@ -3,7 +3,7 @@ This is a sample class for a model. You may choose to use it as-is or make any c
 This has been provided just to give you an idea of how to structure your model class.
 '''
 from openvino.inference_engine import IENetwork, IECore
-from src.gaze_estimation import GazeEstimation
+import pprint
 import cv2
 import time
 
@@ -40,23 +40,25 @@ class HeadPoseEstimation:
 
         raise NotImplementedError
 
-    def predict(self, image):
+    def predict(self, image, results):
         '''
         TODO: You will need to complete this method.
         This method is meant for running predictions on the input image.
         '''
+        pp = pprint.PrettyPrinter()
         processed_image = self.preprocess_input(image)
         input_name, input_shape, output_name_one, output_name_two, output_name_three, output_shape_one, \
         output_shape_two, output_shape_three = self.check_model()
         input_dict = {input_name: processed_image}
         start = time.time()
-        self.net.start_async(request_id=0, inputs=input_dict)
+        infer = self.net.start_async(request_id=0, inputs=input_dict)
         if self.net.requests[0].wait(-1) == 0:
             print('Head Pose Estimation Model Inference speed is: {:.3f} fps'.format(1 / (time.time() - start)))
             results_one = self.net.requests[0].outputs[output_name_one]
             results_two = self.net.requests[0].outputs[output_name_two]
             results_three = self.net.requests[0].outputs[output_name_three]
-
+        if results == 'yes':
+            pp.pprint(infer.get_perf_counts())
         return results_one, results_two, results_three
 
         raise NotImplementedError
@@ -86,12 +88,12 @@ class HeadPoseEstimation:
 
         raise NotImplementedError
 
-    def preprocess_output(self, image):
+    def preprocess_output(self, image, results):
         '''
         Before feeding the output of this model to the next model,
         you might have to preprocess the output. This function is where you can do that.
         '''
-        yaw, pitch, roll = self.predict(image)
+        yaw, pitch, roll = self.predict(image, results)
         angles = [yaw[0], pitch[0], roll[0]]
 
         return angles
