@@ -70,17 +70,29 @@ Afterwards, run the main python file using either of the following command lines
         ```
         While using the video or an image as the input type, a command line argument specifying the directory 
    path of the input video or input image has to be specified by using one of the following command lines. 
-   For an image file specify the command line argument `--input_type` as video and add the path to the video in the `--input_type` command line argument
+   For an image file specify the command line argument `--input_type` as video and add the path to the video in the 
+   `--input_type` command line argument
    
         ```commandline
         python src/main.py --input_type video --input_file path_to_video_file
         ```
         
-        For an image file specify the command line argument `--input_type` as image and add the path to the image in the `--input_type` command line argument
+        For an image file specify the command line argument `--input_type` as image and add the path to the image in the 
+        `--input_type` command line argument
         
         ```commandline
         python src/main.py --input_type image --input_file path_to_image_file
         ```
+     
+     There are optional CLI arguments that can be implemented to change the default set parameters such as
+     
+     `--show_results` can be given the parameter `yes` or `no` to show or hide layers benchmark results respectively while 
+     running the project. The default parameter is `no`, therefore, layers benchmark results will not show when the 
+     command line argument is not added and parameter specified as `yes` 
+     
+     `--device` can be given the name of the target device to perform inference such as `CPU`, `GPU`, `VPU` or `MYRIAD`.
+     The default parameter is set to run inference on `CPU`.
+
 ## Documentation
 
 The project requires different command line arguments depending on your desired input file to the project. 
@@ -97,8 +109,7 @@ has to be added with the parameter `cam` to specify the input type as webcam.
 
 
 ## Benchmarks
-*TODO:* Include the benchmark results of running your model on multiple hardwares and multiple model precisions. 
-Your benchmarks can include: model loading time, input/output processing time, model inference time etc.
+
 ### FP32 Results
 The face detection model uses one precision, that is, FP32-INT1. The loading time and the inference time for the
  model remains the same.
@@ -205,7 +216,9 @@ The face detection model uses one precision, that is, FP32-INT1. The loading tim
    - ### Use the Vtune Amplifier to find hotspots in your Inference Engine Pipeline
    Below are the results obtained when the project was run on the Vtune profiler
    ![Vtune Profiler Results](bin/images/Vtune_profiler.png)
+   
    ![Vtune Profiler Results](bin/images/Vtune_profiler2.png)
+   
    ![Vtune Profiler Results](bin/images/Vtune_profiler1.png)
    
 

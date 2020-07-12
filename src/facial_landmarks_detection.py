@@ -21,7 +21,9 @@ class FacialLandmarksDetection:
         self.device = device
         self.net = None
         self.count = 0
+
         return
+
         raise NotImplementedError
 
     def load_model(self):
@@ -84,6 +86,7 @@ class FacialLandmarksDetection:
             image = cv2.resize(image, (input_shape[3], input_shape[2]), interpolation=cv2.INTER_AREA)
             image = image.transpose((2, 0, 1))
             image = image.reshape(1, *image.shape)
+
         return image
 
         raise NotImplementedError

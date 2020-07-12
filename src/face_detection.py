@@ -43,7 +43,7 @@ class FaceDetection:
         print('Time taken to load the model is: {:.4f} seconds'.format(time.time() - start))
         print("")
 
-        return self.net
+        return
 
         raise NotImplementedError
 

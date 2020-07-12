@@ -11,13 +11,13 @@ import cv2
 
 def main(args):
     fd = FaceDetection('models/intel/face-detection-adas-binary-0001/FP32-'
-                       'INT1/face-detection-adas-binary-0001', device='CPU')
+                       'INT1/face-detection-adas-binary-0001', device=args.device)
     hpe = HeadPoseEstimation('models/intel/head-pose-estimation'
-                       '-adas-0001/FP16-INT8/head-pose-estimation-adas-0001', device='CPU')
+                       '-adas-0001/FP16-INT8/head-pose-estimation-adas-0001', device=args.device)
     fld = FacialLandmarksDetection('models/intel/landmarks-regression-retail-0009/FP16-INT8/'
-                             'landmarks-regression-retail-0009', device='CPU')
+                             'landmarks-regression-retail-0009', device=args.device)
     ge = GazeEstimation('models/intel/gaze-estimation-adas-0002/FP16-INT8/'
-                        'gaze-estimation-adas-0002', device='CPU')
+                        'gaze-estimation-adas-0002', device=args.device)
     mc = MouseController('medium', 'fast')
 
     feed = InputFeeder(input_type=args.input_type, input_file=args.input_file)
@@ -64,6 +64,7 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument('--input_type', required=True, help='Enter the type of input either video, cam or image')
     parser.add_argument('--input_file', default='bin/demo.mp4', help='Enter the directory path for the input file')
+    parser.add_argument('--device', default='CPU', help='Enter the name of the device to perform inference on')
     parser.add_argument('--show_results', default='no', help='Enter yes to show and no to hide performance results')
     args = parser.parse_args()
     main(args)

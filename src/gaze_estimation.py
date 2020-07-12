@@ -21,7 +21,9 @@ class GazeEstimation:
         self.model_structure = model_name + '.bin'
         self.device = device
         self.net = None
+
         return
+
         raise NotImplementedError
 
     def load_model(self):
@@ -37,7 +39,9 @@ class GazeEstimation:
         self.net = core.load_network(network=model, device_name='CPU', num_requests=1)
         print('Time taken to load the model is: {:.4f} seconds'.format(time.time()-start))
         print("")
+
         return self.net
+
         raise NotImplementedError
 
     def predict(self, right_eye, left_eye, head_angles, results):
@@ -55,6 +59,7 @@ class GazeEstimation:
             results = self.net.requests[0].outputs['gaze_vector']
         if results == 'yes':
             pp.pprint(infer.get_perf_counts())
+
         return self.preprocess_output(results)
 
         raise NotImplementedError
@@ -62,7 +67,9 @@ class GazeEstimation:
     def check_model(self):
         output_name = next(iter(self.net.outputs))
         output_shape = self.net.outputs[output_name].shape
+
         return self.net.inputs, output_name, output_shape
+
         raise NotImplementedError
 
     def preprocess_input(self, right_eye, left_eye, angles):
@@ -83,6 +90,7 @@ class GazeEstimation:
             angles = angles.reshape(1, 3)
 
         return right_eye, left_eye, angles
+
         raise NotImplementedError
 
     def preprocess_output(self, outputs):

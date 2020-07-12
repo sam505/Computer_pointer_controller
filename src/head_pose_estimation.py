@@ -20,7 +20,9 @@ class HeadPoseEstimation:
         self.model_structure = model_name + '.bin'
         self.device = device
         self.net = None
+
         return
+
         raise NotImplementedError
 
     def load_model(self):
@@ -36,6 +38,7 @@ class HeadPoseEstimation:
         self.net = core.load_network(network=model, device_name='CPU', num_requests=1)
         print('Time taken to load the model is: {:.4f} seconds'.format(time.time() - start))
         print("")
+
         return self.net
 
         raise NotImplementedError
@@ -59,6 +62,7 @@ class HeadPoseEstimation:
             results_three = self.net.requests[0].outputs[output_name_three]
         if results == 'yes':
             pp.pprint(infer.get_perf_counts())
+
         return results_one, results_two, results_three
 
         raise NotImplementedError
@@ -70,8 +74,10 @@ class HeadPoseEstimation:
         output_shape_one = self.net.outputs[output_name_one].shape
         output_shape_two = self.net.outputs[output_name_two].shape
         output_shape_three = self.net.outputs[output_name_three].shape
+
         return input_name, input_shape, output_name_one, output_name_two, output_name_three, \
                output_shape_one, output_shape_two, output_shape_three
+
         raise NotImplementedError
 
     def preprocess_input(self, image):
@@ -84,6 +90,7 @@ class HeadPoseEstimation:
         image = cv2.resize(image, (input_shape[3], input_shape[2]), interpolation=cv2.INTER_AREA)
         image = image.transpose((2, 0, 1))
         image = image.reshape(1, *image.shape)
+
         return image
 
         raise NotImplementedError
