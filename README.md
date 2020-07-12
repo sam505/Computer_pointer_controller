@@ -11,6 +11,35 @@ models from the [Intel Pre-trained Models Zoo](https://software.intel.com/conten
 ![Flow of Data](bin/images/Flow_of_data.png)
 
 ## Project Set Up and Installation
+### Setting up the virtual environment
+   - Open a terminal.
+   
+       ``
+    CTRL+ALT+T
+    ``
+   - Setup the pip package manager.
+   
+        `pip -h`
+   
+        Check if the python version has pip installed if not run the following command or follow 
+        [this](https://pip.pypa.io/en/latest/installing/) documentation to install pip.
+   
+        `python -m pip install -U pip`
+   - Install the virtualenv package.
+   
+        `pip install virtualenv`
+   
+   - Create the virtual environment.
+   
+        `vitualenv venv`
+   
+   - Activate the virtual environment.
+   
+        `source venv/bin/activate`
+        
+   - Deactivate the virtual environment.
+   
+        `deactivate`
 
 The installation instructions for the [OpenVINO Toolkit](https://docs.openvinotoolkit.org/latest/index.html), 
 can be found [here](https://docs.openvinotoolkit.org/latest/index.html)
