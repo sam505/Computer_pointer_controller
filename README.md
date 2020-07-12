@@ -66,6 +66,9 @@ from the [Intel Pre-trained Models Zoo](https://software.intel.com/content/www/u
     - [Facial Landmarks Detection](https://docs.openvinotoolkit.org/latest/_models_intel_landmarks_regression_retail_0009_description_landmarks_regression_retail_0009.html)
     - [Gaze Estimation Model](https://docs.openvinotoolkit.org/latest/_models_intel_gaze_estimation_adas_0002_description_gaze_estimation_adas_0002.html)
     
+    Save all these models in the `models/intel/` directory. For example, the directory for the face detection 
+    .xml file should be `models/intel/face-detection-adas-binary-0001/FP32-INT1/face-detection-adas-binary-0001.xml`
+    
 - [src](src) ~ Contains all the python files required to control the flow of data from either the video file, webcam 
 feed or an image through the four models and obtain results that will be used to control the computer pointer.
 There are 7 python files all performing different tasks. Running the app, loading the four different models, 

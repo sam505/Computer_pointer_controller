@@ -6,6 +6,10 @@ from openvino.inference_engine import IENetwork, IECore
 import pprint
 import cv2
 import time
+import logging
+
+logger = logging.getLogger(__name__)
+logging.basicConfig(level=logging.DEBUG)
 
 
 class FaceDetection:
@@ -38,10 +42,9 @@ class FaceDetection:
         core = IECore()
         start = time.time()
         model = core.read_network(self.model_weights, self.model_structure)
-        print("Loading the Face Detection Model...")
+        logger.info("Loading the Face Detection Model...")
         self.net = core.load_network(network=model, device_name='CPU', num_requests=1)
-        print('Time taken to load the model is: {:.4f} seconds'.format(time.time() - start))
-        print("")
+        logger.info('Time taken to load the model is: {:.4f} seconds'.format(time.time() - start))
 
         return
 
@@ -61,8 +64,9 @@ class FaceDetection:
         self.count += 1
         if self.net.requests[0].wait(-1) == 0:
             results = self.net.requests[0].outputs[output_name]
-            print('Face Detection Model Inference speed is: {:.3f} fps'.format(1 / (time.time()-start)))
+            logger.info('Face Detection Model Inference speed is: {:.3f} fps'.format(1 / (time.time()-start)))
         if perf == 'yes':
+            logger.info('Layers Performance counts:')
             pp.pprint(infer.get_perf_counts())
 
         return results

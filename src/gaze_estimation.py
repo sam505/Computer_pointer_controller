@@ -7,6 +7,10 @@ import cv2
 import pprint
 import numpy as np
 import time
+import logging
+
+logger = logging.getLogger(__name__)
+logging.basicConfig(level=logging.DEBUG)
 
 
 class GazeEstimation:
@@ -34,11 +38,10 @@ class GazeEstimation:
         '''
         core = IECore()
         start = time.time()
-        print('Loading the Gaze Estimation Model...')
+        logger.info('Loading the Gaze Estimation Model...')
         model = core.read_network(self.model_weights, self.model_structure)
         self.net = core.load_network(network=model, device_name='CPU', num_requests=1)
-        print('Time taken to load the model is: {:.4f} seconds'.format(time.time()-start))
-        print("")
+        logger.info('Time taken to load the model is: {:.4f} seconds'.format(time.time()-start))
 
         return self.net
 
@@ -55,9 +58,10 @@ class GazeEstimation:
         start = time.time()
         infer = self.net.start_async(request_id=0, inputs=input_dict)
         if self.net.requests[0].wait(-1) == 0:
-            print('Gaze Estimation Model Inference speed is: {:.3f} fps'.format(1 / (time.time() - start)))
+            logger.info('Gaze Estimation Model Inference speed is: {:.3f} fps'.format(1 / (time.time() - start)))
             results = self.net.requests[0].outputs['gaze_vector']
         if results == 'yes':
+            logger.info("Gaze Estimation Model Layers performance counts results")
             pp.pprint(infer.get_perf_counts())
 
         return self.preprocess_output(results)

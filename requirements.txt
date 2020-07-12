@@ -1,10 +1,10 @@
-image==1.5.27
-ipdb==0.12.3
-ipython==7.10.2
-numpy==1.17.4
-Pillow>=6.2.1
-requests==2.22.0
-virtualenv==16.7.9
+image==1.5.32
+ipdb==0.13.3
+ipython==7.16.1
+numpy~=1.18.4
+Pillow==7.2.0
+requests==2.24.0
+virtualenv==20.0.26
+PyAutoGui==0.9.50
 
 opencv-python~=4.2.0.34
-PyAutoGUI~=0.9.50

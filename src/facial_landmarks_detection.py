@@ -6,6 +6,10 @@ from openvino.inference_engine import IENetwork, IECore
 import pprint
 import cv2
 import time
+import logging
+
+logger = logging.getLogger(__name__)
+logging.basicConfig(level=logging.DEBUG)
 
 
 class FacialLandmarksDetection:
@@ -35,10 +39,9 @@ class FacialLandmarksDetection:
         core = IECore()
         start = time.time()
         model = core.read_network(self.model_weights, self.model_structure)
-        print('Loading the Facial Landmarks Detection Model...')
+        logger.info('Loading the Facial Landmarks Detection Model...')
         self.net = core.load_network(network=model, device_name='CPU', num_requests=1)
-        print('Time taken to load the model is: {:.4f} seconds'.format(time.time()-start))
-        print("")
+        logger.info('Time taken to load the model is: {:.4f} seconds'.format(time.time()-start))
 
         return self.net
 
@@ -58,9 +61,10 @@ class FacialLandmarksDetection:
         start = time.time()
         if self.net.requests[0].wait(-1) == 0:
             results = self.net.requests[0].outputs[output_name]
+            logger.info('Facial Landmarks Detection Inference speed is: {:.3f} fps'.format(1 / (time.time() - start)))
         if results == 'yes':
+            logger.info('Facial Landmarks Detection Model performance counts results')
             pp.pprint(infer.get_perf_counts())
-        print('Facial Landmarks Detection Inference speed is: {:.3f} fps'.format(1 / (time.time() - start)))
 
         return results
 
