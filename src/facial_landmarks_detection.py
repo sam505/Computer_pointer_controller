@@ -104,6 +104,10 @@ class FacialLandmarksDetection:
         h, w, c = image.shape
         x0, y0 = int(w*outputs[0][0][0][0]), int(h*outputs[0][1][0][0])
         x1, y1 = int(w*outputs[0][2][0][0]), int(h*outputs[0][3][0][0])
+        if results == 'yes':
+            image = cv2.rectangle(image, (x0 - 20, y0 - 20), (x0 + 20, y0 + 20), (0, 255, 0), 1)
+            image = cv2.rectangle(image, (x1 - 20, y1 - 20), (x1 + 20, y1 + 20), (0, 255, 0), 1)
+            cv2.imshow('Facial Landmarks', image)
         right_eye = image[y0-30: y0+30, x0-30:x0+30]
         left_eye = image[y1 - 30: y1 + 30, x1 - 30:x1 + 30]
 

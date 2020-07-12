@@ -124,6 +124,9 @@ Afterwards, run the main python file using either of the following command lines
      
      `--device` can be given the name of the target device to perform inference such as `CPU`, `GPU`, `VPU` or `MYRIAD`.
      The default parameter is set to run inference on `CPU`.
+     
+     `--model_path` This is a required command line argument when running the project. A directory path containing all 
+     the four models should be added as the command line argument parameter.
 
 ## Documentation
 
