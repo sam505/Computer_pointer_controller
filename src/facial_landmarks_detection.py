@@ -61,10 +61,11 @@ class FacialLandmarksDetection:
         start = time.time()
         if self.net.requests[0].wait(-1) == 0:
             results = self.net.requests[0].outputs[output_name]
-            logger.info('Facial Landmarks Detection Inference speed is: {:.3f} fps'.format(1 / (time.time() - start)))
-        if results == 'yes':
-            logger.info('Facial Landmarks Detection Model performance counts results')
-            pp.pprint(infer.get_perf_counts())
+
+            if results == 'yes':
+                logger.info('Facial Landmarks Detection Inference speed is: {:.3f} fps'.format(1 / (time.time() - start)))
+                logger.info('Facial Landmarks Detection Model performance counts results')
+                pp.pprint(infer.get_perf_counts())
 
         return results
 

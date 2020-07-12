@@ -50,7 +50,8 @@ def main(args):
                     head_angles = hpe.preprocess_output(cropped, results_status)
                     coordinates = ge.predict(right_eye, left_eye, head_angles, results_status)
                     mc.move(coordinates[0][0], coordinates[0][1])
-                    logger.info('The total time taken to obtain results is: {:.4f} seconds'.format(time.time()-start))
+                    if results_status == 'yes':
+                        logger.info('The total time taken to obtain results is: {:.4f} seconds'.format(time.time()-start))
                     if key == ord('q'):
                         break
                     if not_stream != ord('t') and (stream == ord('w') or not_stream != ord('t')):
@@ -73,4 +74,7 @@ if __name__ == '__main__':
     parser.add_argument('--show_results', default='no', help='Enter yes to show and no to hide performance results')
     parser.add_argument('--model_path', required=True, help='Add the path to the directory containing the four models')
     args = parser.parse_args()
-    main(args)
+    try:
+        main(args)
+    except KeyboardInterrupt:
+        logger.info('Program cancelled by user')

@@ -58,11 +58,11 @@ class GazeEstimation:
         start = time.time()
         infer = self.net.start_async(request_id=0, inputs=input_dict)
         if self.net.requests[0].wait(-1) == 0:
-            logger.info('Gaze Estimation Model Inference speed is: {:.3f} fps'.format(1 / (time.time() - start)))
             results = self.net.requests[0].outputs['gaze_vector']
-        if results == 'yes':
-            logger.info("Gaze Estimation Model Layers performance counts results")
-            pp.pprint(infer.get_perf_counts())
+            if results == 'yes':
+                logger.info('Gaze Estimation Model Inference speed is: {:.3f} fps'.format(1 / (time.time() - start)))
+                logger.info("Gaze Estimation Model Layers performance counts results")
+                pp.pprint(infer.get_perf_counts())
 
         return self.preprocess_output(results)
 

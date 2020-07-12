@@ -64,10 +64,11 @@ class FaceDetection:
         self.count += 1
         if self.net.requests[0].wait(-1) == 0:
             results = self.net.requests[0].outputs[output_name]
-            logger.info('Face Detection Model Inference speed is: {:.3f} fps'.format(1 / (time.time()-start)))
-        if perf == 'yes':
-            logger.info('Layers Performance counts:')
-            pp.pprint(infer.get_perf_counts())
+
+            if perf == 'yes':
+                logger.info('Face Detection Model Inference speed is: {:.3f} fps'.format(1 / (time.time() - start)))
+                logger.info('Layers Performance counts:')
+                pp.pprint(infer.get_perf_counts())
 
         return results
 
