@@ -216,25 +216,24 @@ The face detection model uses one precision, that is, FP32-INT1. The loading tim
    
 ## Stand Out Suggestions
    - ### Build an Inference Pipeline for both video file and webcam feed as input:
-   I have given the user an option to choose the type of media they would like to feed to the project by the use of a 
-   command line argument. Besides that, the user can also add the path to another video file or image file 
-   using a command line argument.
+      I have given the user an option to choose the type of media they would like to feed to the project by the use of a 
+      command line argument. Besides that, the user can also add the path to another video file or image file 
+      using a command line argument.
  
    - ### Can you improve your inference speed without significant drop in performance by changing the precision of the models?
-   It is possible to improve the inference speed without experiencing a significant drop in performance. 
-   I have run the app using different models precisions and calculated the time it takes to obtain results on 
-   different model precision combinations. I have run the project with FP32 for all models and the time taken to run 
-   inference on all 4 models and obtain results ranges from `1.2277 - 1.2416 seconds`. The average is `1.23465 seconds`
+      It is possible to improve the inference speed without experiencing a significant drop in performance. 
+      I have run the app using different models precisions and calculated the time it takes to obtain results on different model precision combinations. 
+      I have run the project with FP32 for all models and the time taken to run inference on all 4 models and obtain results ranges from `1.2277 - 1.2416 seconds`. 
+      The average is `1.23465 seconds`
     
-   When using FP16 as the models precision, the total time taken to run an inference on all models ranges from
-   `1.2216 - 1.2251 seconds`. The average is `1.22335 seconds`
+      When using FP16 as the models precision, the total time taken to run an inference on all models ranges from
+      `1.2216 - 1.2251 seconds`. The average is `1.22335 seconds`
     
-   Lastly, when using the FP16-INT8 models precision, the total time taken to run one inference across all models 
-   ranges from `1.2108 - 1.2259 seconds`. The average is `1.21835 seconds`
+      Lastly, when using the FP16-INT8 models precision, the total time taken to run one inference across all models 
+      ranges from `1.2108 - 1.2259 seconds`. The average is `1.21835 seconds`
     
-   Clearly, it is possible to improve the general performance of the project by reducing the model precision
-     and the performance will almost be the same. There are no instances where a face was not detected or the mouse
-      failed to move while running on FP16-INT8 as the models precision.
+      Clearly, it is possible to improve the general performance of the project by reducing the model precision and the performance will almost be the same. 
+      There are no instances where a face was not detected or the mouse failed to move while running on FP16-INT8 as the models precision.
     
    - ### Add a toggle to the UI to shut off the camera feed and show stats only(as well as to toggle the camera feed back on)
         I have attempted this but it works when you press the key multiple times and cuts the camera feed. After a few 
@@ -243,19 +242,18 @@ The face detection model uses one precision, that is, FP32-INT1. The loading tim
    - ### There will be certain edge cases that will cause the system to not function properly
         Has a detailed explanation below on the Edge Cases section
 
-   - ### Benchmark rhe running times different parts of the pre-processing and inference pipeline and let the 
-   ### user specify a CLI argument if they want to see the benchmark timing
-   To view benchmark timing, add the command line argument `--show_results` and specify its parameter as `yes`. 
-   By default, when running the app, the parameter fo the `--show_results` CLI argument is set to `no`.
+   - ### Benchmark rhe running times different parts of the pre-processing and inference pipeline and let the user specify a CLI argument if they want to see the benchmark timing
+      To view benchmark timing, add the command line argument `--show_results` and specify its parameter as `yes`. 
+      By default, when running the app, the parameter fo the `--show_results` CLI argument is set to `no`.
    
    - ### Use the Vtune Amplifier to find hotspots in your Inference Engine Pipeline
-   Below are the results obtained when the project was run on the Vtune profiler
-   ![Vtune Profiler Results](bin/images/Vtune_profiler.png)
-   
-   ![Vtune Profiler Results](bin/images/Vtune_profiler2.png)
-   
-   ![Vtune Profiler Results](bin/images/Vtune_profiler1.png)
-   
+      Below are the results obtained when the project was run on the Vtune profiler
+      ![Vtune Profiler Results](bin/images/Vtune_profiler.png)
+
+      ![Vtune Profiler Results](bin/images/Vtune_profiler2.png)
+
+      ![Vtune Profiler Results](bin/images/Vtune_profiler1.png)
+
 
 ### Async Inference
 
