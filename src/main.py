@@ -52,12 +52,12 @@ def main(args):
                     mc.move(coordinates[0][0], coordinates[0][1])
                     if results_status == 'yes':
                         logger.info('The total time taken to obtain results is: {:.4f} seconds'.format(time.time()-start))
-                    if key == ord('q'):
-                        break
-                    if not_stream != ord('t') and (stream == ord('w') or not_stream != ord('t')):
-                        cv2.imshow('Raw', raw)
-                    if stream != ord('w') and not_stream == ord('t'):
-                        cv2.destroyAllWindows()
+                        if key == ord('q'):
+                            break
+                        if not_stream != ord('t') and (stream == ord('w') or not_stream != ord('t')):
+                            cv2.imshow('Raw', raw)
+                        if stream != ord('w') and not_stream == ord('t'):
+                            cv2.destroyAllWindows()
             feed.close()
         except AttributeError:
             logger.warning('Cannot detected a face on the video frame')

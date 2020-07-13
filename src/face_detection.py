@@ -113,9 +113,10 @@ class FaceDetection:
                 y_max = int(h * character[6])
                 crop = image[y_min - 40:y_max + 40, x_min - 50:x_max + 50]
                 if perf == 'yes':
+                    image = cv2.rectangle(image, (x_min, y_min), (x_max, y_max), (0, 255, 0), 2)
                     image = cv2.resize(image, (720, 480), interpolation=cv2.INTER_AREA)
-                    image = cv2.rectangle(image, (x_min, y_min), (x_max, y_max), (0, 255, 0), 1)
                     cv2.imshow('Face Detection Results', image)
+
                 return crop
 
         # raise NotImplementedError
