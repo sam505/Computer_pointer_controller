@@ -3,7 +3,7 @@ ipdb==0.13.3
 ipython==7.16.3
 numpy~=1.18.4
 Pillow==9.3.0
-requests==2.24.0
+requests==2.31.0
 virtualenv==20.0.26
 PyAutoGui==0.9.50
 
